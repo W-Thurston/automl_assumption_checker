@@ -1,6 +1,7 @@
 # Thresholds for pass/fail logic
 LINEARITY_R2_THRESHOLD = 0.7
 HOMOSCEDASTICITY_PVAL_THRESHOLD = 0.05
+NORMALITY_PVAL_THRESHOLD = 0.05
 
 # Thresholds for diagnostic severity (optional, used for display or flagging)
 R2_SEVERITY_THRESHOLDS = {"high": 0.9, "moderate": 0.7, "low": 0.5}
