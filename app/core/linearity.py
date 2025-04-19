@@ -1,13 +1,15 @@
-import base64
-import io
-
 import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
 
+from app.core.types import AssumptionResult
+from app.utils import fig_to_base64
 
-def check_linearity(X: pd.Series, y: pd.Series, return_plot: bool = False) -> dict:
+
+def check_linearity(
+    X: pd.Series, y: pd.Series, return_plot: bool = False
+) -> AssumptionResult:
     """
     Perform a linearity check using residuals vs fitted plot and R².
 
@@ -26,13 +28,6 @@ def check_linearity(X: pd.Series, y: pd.Series, return_plot: bool = False) -> di
     residuals = y - y_pred
     r2 = r2_score(y, y_pred)
 
-    result = {
-        "r_squared": r2,
-        "residuals": residuals,
-        "fitted": y_pred,
-        "pass": r2 > 0.7,  # basic heuristic for now
-    }
-
     if return_plot:
         fig, ax = plt.subplots()
         ax.scatter(y_pred, residuals, alpha=0.7)
@@ -40,10 +35,14 @@ def check_linearity(X: pd.Series, y: pd.Series, return_plot: bool = False) -> di
         ax.set_xlabel("Fitted values")
         ax.set_ylabel("Residuals")
         ax.set_title("Residuals vs Fitted")
-        buf = io.BytesIO()
-        plt.savefig(buf, format="png")
-        plt.close(fig)
-        encoded = base64.b64encode(buf.getvalue()).decode("utf-8")
-        result["plot_base64"] = encoded
+        encoded = fig_to_base64(fig)
 
-    return result
+    return AssumptionResult(
+        name="linearity",
+        passed=r2 > 0.7,
+        summary=f"R² = {r2:.2f} → {'Pass' if r2 > 0.7 else 'Fail'}",
+        details={"r_squared": r2},
+        residuals=residuals,
+        fitted=y_pred,
+        plot_base64=encoded if return_plot else None,
+    )
