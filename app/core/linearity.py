@@ -20,7 +20,7 @@ def check_linearity(
             PNG of the plot. Defaults to False.
 
     Returns:
-        dict: R², residuals, optional plot, and a basic pass/fail flag
+        AssumptionResult
     """
     X_reshaped = X.values.reshape(-1, 1)
     model = LinearRegression().fit(X_reshaped, y)
