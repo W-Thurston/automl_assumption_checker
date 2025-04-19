@@ -45,11 +45,12 @@ All of this is handled via pre-commit. To install:
 These hooks will automatically run before each commit. CI will fail if code style isn’t followed.
 
 ## ✅ Submitting a Pull Request
-    - Make your changes on a feature branch.
+    - Make your changes on a `feature/*` branch.
     - Write or update tests.
     - Ensure all pre-commit checks and CI pass.
-    - Submit a pull request using the [PR template](https://github.com/W-Thurston/automl_assumption_checker/blob/main/.github/pull_request_template.md).
+    - Submit a pull request using the [PR template](https://github.com/W-Thurston/automl_assumption_checker/blob/main/.github/pull_request_template.md) to `dev`.
     - Link to related issues if applicable.
+
 
 ## 🙏 Thanks
 Every contribution — big or small — helps improve this project.
