@@ -1,14 +1,15 @@
 # app/core/homoscedasticity.py
 """
-Check homoscedasticity assumption using Breusch-Pagan test and residuals vs fitted plot.
+Check homoscedasticity assumption using Breusch-Pagan test
+    and residuals vs fitted plot.
 """
+
 import matplotlib.pyplot as plt
 import pandas as pd
 import statsmodels.api as sm
 from statsmodels.stats.diagnostic import het_breuschpagan
 
-from app.config import (HOMOSCEDASTICITY_PVAL_THRESHOLD,
-                        PVAL_SEVERITY_THRESHOLDS)
+from app.config import HOMOSCEDASTICITY_PVAL_THRESHOLD, PVAL_SEVERITY_THRESHOLDS
 from app.core.registry import register_assumption
 from app.core.types import AssumptionResult
 from app.utils import build_result, classify_severity, fig_to_base64
@@ -21,19 +22,18 @@ def check_homoscedasticity(
     X: pd.Series, y: pd.Series, return_plot: bool = False
 ) -> AssumptionResult:
     """
-    Check homoscedasticity using Breusch-Pagan test and residuals vs fitted plot.
+    Check for homoscedasticity using residual vs fitted plot and Breusch-Pagan test.
 
     Args:
         X (pd.Series): Predictor (1D)
         y (pd.Series): Response (1D)
-        return_plot (bool, optional): Whether to return base64-encoded
-            PNG of the plot. Defaults to False.
+        return_plot (bool, optional): Whether to return a plot. Defaults to False.
 
     Returns:
         AssumptionResult: Structured diagnostic output.
     """
 
-    # Fit OLS model using statsmodel
+    # Fit OLS model using statsmodels
     X_reshaped = X.values.reshape(-1, 1)
     model = sm.OLS(y, sm.add_constant(X_reshaped)).fit()
     residuals = model.resid
@@ -46,7 +46,7 @@ def check_homoscedasticity(
     # Classify severity of violation based on p-value
     severity = classify_severity(pval, PVAL_SEVERITY_THRESHOLDS)
 
-    # Recommend next steps if residuals are heteroscedastic
+    # Recommend next steps if residuals are heteroskedastic
     recommendation = (
         None
         if passed
