@@ -7,6 +7,7 @@ __all__ = [
     "generate_heteroscedastic_data",
     "generate_multicollinear_data",
     "generate_nonlinear_data",
+    "generate_skewed_data",
     "list_simulations",
 ]
 
@@ -95,6 +96,27 @@ def generate_nonlinear_data(n_samples: int = 100, seed: int = None) -> pd.DataFr
     return pd.DataFrame({"x": X, "y": y})
 
 
+def generate_skewed_data(n_samples: int = 100, seed: int = None) -> pd.DataFrame:
+    """
+    Generate linear-looking data with clearly non-normal
+     residuals using an exponential noise component.
+
+    Args:
+        n_samples (int, optional): Number of observations to generate. Defaults to 100.
+        seed (int, optional): Randomness seed. Defaults to None.
+
+    Returns:
+        pd.DataFrame: A DataFrame with columns 'x' and 'y'.
+    """
+    if seed is not None:
+        np.random.seed(seed)
+    x = np.random.normal(loc=0, scale=1, size=n_samples)
+    # Exponential errors are positively skewed → residuals will be non-normal
+    error = np.random.exponential(scale=1.0, size=n_samples)
+    y = 2 * x + error
+    return pd.DataFrame({"x": x, "y": y})
+
+
 def list_simulations() -> dict:
     """
     Return a dictionary of available simulated data generators.
@@ -108,4 +130,5 @@ def list_simulations() -> dict:
         "heteroscedastic": generate_heteroscedastic_data,
         "multicollinear": generate_multicollinear_data,
         "nonlinear": generate_nonlinear_data,
+        "skewed": generate_skewed_data,
     }
