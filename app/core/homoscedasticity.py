@@ -70,6 +70,7 @@ def check_homoscedasticity(
         ax.set_title("Residuals vs Fitted (Homoscedasticity Check)")
         encoded = fig_to_base64(fig)
 
+    # Package the diagnostic results using the shared builder
     return build_result(
         name="homoscedasticity",
         passed=passed,
