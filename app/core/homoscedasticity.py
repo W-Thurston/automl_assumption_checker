@@ -7,11 +7,11 @@ from app.core.types import AssumptionResult
 from app.utils import fig_to_base64
 
 
-def check_homoskedasticity(
+def check_homoscedasticity(
     X: pd.Series, y: pd.Series, return_plot: bool = False
 ) -> AssumptionResult:
     """
-    Check homoskedasticity using Breusch-Pagan test and residuals vs fitted plot.
+    Check homoscedasticity using Breusch-Pagan test and residuals vs fitted plot.
 
     Args:
         X (pd.Series): Predictor (1D)
@@ -37,13 +37,13 @@ def check_homoskedasticity(
         ax.axhline(0, color="red", linestyle="--")
         ax.set_xlabel("Fitted values")
         ax.set_ylabel("Residuals")
-        ax.set_title("Residuals vs Fitted (Homoskedasticity Check)")
+        ax.set_title("Residuals vs Fitted (homoscedasticity Check)")
         encoded = fig_to_base64(fig)
     else:
         encoded = None
 
     return AssumptionResult(
-        name="homoskedasticity",
+        name="homoscedasticity",
         passed=passed,
         summary=f"Breusch-Pagan p = {pval:.4f} → {'Pass' if passed else 'Fail'}",
         details={"breusch_pagan_pval": pval},

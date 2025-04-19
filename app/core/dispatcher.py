@@ -2,7 +2,7 @@ from typing import Callable, Dict
 
 import pandas as pd
 
-from app.core.homoskedasticity import check_homoskedasticity
+from app.core.homoscedasticity import check_homoscedasticity
 from app.core.linearity import check_linearity
 from app.core.types import AssumptionResult
 
@@ -11,7 +11,7 @@ ASSUMPTION_CHECKS: Dict[
     str, Callable[[pd.Series, pd.Series, bool], AssumptionResult]
 ] = {
     "linearity": check_linearity,
-    "homoskedasticity": check_homoskedasticity,
+    "homoscedasticity": check_homoscedasticity,
     # Add more as you implement them
 }
 
