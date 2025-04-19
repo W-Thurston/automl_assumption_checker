@@ -8,7 +8,7 @@ import numpy as np
 
 from app.core.types import AssumptionResult
 
-__all__ = ["fig_to_base64"]
+__all__ = ["fig_to_base64", "build_result", "classify_severity"]
 
 
 def fig_to_base64(fig) -> str:
@@ -70,3 +70,22 @@ def build_result(
         recommendation=recommendation,
         flag=flag,
     )
+
+
+def classify_severity(value: float, thresholds: dict) -> str:
+    """
+    Classify a numeric value into 'high', 'moderate', or 'low' based on thresholds.
+
+    Args:
+        value (float): The numeric metric (e.g., R², p-value, VIF).
+        thresholds (dict): Dict with keys 'high', 'moderate', 'low'.
+
+    Returns:
+        str: One of 'high', 'moderate', or 'low'
+    """
+    if value >= thresholds["high"]:
+        return "high"
+    elif value >= thresholds["moderate"]:
+        return "moderate"
+    else:
+        return "low"
