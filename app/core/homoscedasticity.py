@@ -4,12 +4,14 @@ import pandas as pd
 import statsmodels.api as sm
 from statsmodels.stats.diagnostic import het_breuschpagan
 
+from app.core.registry import register_assumption
 from app.core.types import AssumptionResult
 from app.utils import fig_to_base64
 
 __all__ = ["check_homoscedasticity"]
 
 
+@register_assumption("homoscedasticity")
 def check_homoscedasticity(
     X: pd.Series, y: pd.Series, return_plot: bool = False
 ) -> AssumptionResult:

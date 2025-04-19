@@ -1,22 +1,12 @@
 # app/core/dispatcher.py
-from typing import Callable, Dict
+from typing import Dict
 
 import pandas as pd
 
-from app.core.homoscedasticity import check_homoscedasticity
-from app.core.linearity import check_linearity
+from app.core.registry import ASSUMPTION_CHECKS
 from app.core.types import AssumptionResult
 
 __all__ = ["check_assumption", "run_all_checks"]
-
-# Define the registry mapping assumption names to functions
-ASSUMPTION_CHECKS: Dict[
-    str, Callable[[pd.Series, pd.Series, bool], AssumptionResult]
-] = {
-    "linearity": check_linearity,
-    "homoscedasticity": check_homoscedasticity,
-    # Add more as you implement them
-}
 
 
 def check_assumption(
