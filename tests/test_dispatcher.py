@@ -19,7 +19,7 @@ def test_dispatch_all_assumptions():
     """
     Test dispatcher's run_all_checks().
     """
-    df = simulated_data.generate_linear_data(seed=123)
+    df = simulated_data.generate_linear_data(n_samples=300, seed=42)
     results = dispatcher.run_all_checks(df["x"], df["y"])
     assert "linearity" in results
     assert "homoscedasticity" in results
@@ -31,6 +31,6 @@ def test_unknown_assumption_raises():
     """
     Test an unknown assumption as input to check_assumption().
     """
-    df = simulated_data.generate_linear_data(seed=123)
+    df = simulated_data.generate_linear_data(n_samples=300, seed=42)
     with pytest.raises(ValueError):
         dispatcher.check_assumption("banana", df["x"], df["y"])
