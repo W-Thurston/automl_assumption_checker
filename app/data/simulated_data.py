@@ -2,6 +2,14 @@
 import numpy as np
 import pandas as pd
 
+__all__ = [
+    "generate_linear_data",
+    "generate_heteroscedastic_data",
+    "generate_multicollinear_data",
+    "generate_nonlinear_data",
+    "list_simulations",
+]
+
 
 def generate_linear_data(
     n_samples: int = 100, noise_std: float = 1.0, seed: int = None

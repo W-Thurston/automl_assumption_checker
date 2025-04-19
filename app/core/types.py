@@ -4,6 +4,8 @@ from typing import Optional
 
 import numpy as np
 
+__all__ = ["AssumptionResult"]
+
 
 @dataclass
 class AssumptionResult:

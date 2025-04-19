@@ -7,6 +7,8 @@ from sklearn.metrics import r2_score
 from app.core.types import AssumptionResult
 from app.utils import fig_to_base64
 
+__all__ = ["check_linearity"]
+
 
 def check_linearity(
     X: pd.Series, y: pd.Series, return_plot: bool = False

@@ -7,6 +7,8 @@ from app.core.homoscedasticity import check_homoscedasticity
 from app.core.linearity import check_linearity
 from app.core.types import AssumptionResult
 
+__all__ = ["check_assumption", "run_all_checks"]
+
 # Define the registry mapping assumption names to functions
 ASSUMPTION_CHECKS: Dict[
     str, Callable[[pd.Series, pd.Series, bool], AssumptionResult]

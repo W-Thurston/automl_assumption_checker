@@ -4,6 +4,8 @@ import io
 
 import matplotlib.pyplot as plt
 
+__all__ = ["fig_to_base64"]
+
 
 def fig_to_base64(fig) -> str:
     buf = io.BytesIO()
