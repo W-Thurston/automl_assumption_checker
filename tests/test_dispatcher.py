@@ -1,3 +1,4 @@
+# tests/test_dispatcher.py
 import pytest
 
 from app.core import dispatcher

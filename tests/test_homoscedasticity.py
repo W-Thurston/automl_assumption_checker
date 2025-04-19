@@ -1,3 +1,4 @@
+# tests/test_homoscedasticity.py
 from app.core import homoscedasticity
 from app.data import simulated_data
 

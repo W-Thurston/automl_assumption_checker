@@ -1,3 +1,4 @@
+# app/core/homoscedasticity.py
 import matplotlib.pyplot as plt
 import pandas as pd
 import statsmodels.api as sm

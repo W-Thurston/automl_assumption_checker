@@ -1,3 +1,4 @@
+# tests/test_simulated_data.py
 import numpy as np
 import statsmodels.api as sm
 
