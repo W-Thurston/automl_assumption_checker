@@ -3,6 +3,10 @@ import subprocess
 
 
 def test_main_script_runs_and_prints_expected_output():
+    """
+    Tests that the CLI entry point script runs and
+    prints the expected message.
+    """
     result = subprocess.run(
         ["python", "app/main.py"],
         capture_output=True,

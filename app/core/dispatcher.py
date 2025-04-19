@@ -31,10 +31,13 @@ def check_assumption(
             PNG of the plot. Defaults to False.
 
     Returns:
-        AssumptionResult
+        AssumptionResult: An object containing the outcome of the
+            assumption check, including whether the check passed,
+            a summary message, diagnostic details, optional residuals
+            and fitted values, and an optional base64-encoded plot.
     """
     if name not in ASSUMPTION_CHECKS:
-        raise ValueError(f"Unkown assumption: '{name}'")
+        raise ValueError(f"Unknown assumption: '{name}'")
 
     return ASSUMPTION_CHECKS[name](X, y, return_plot)
 
@@ -52,7 +55,8 @@ def run_all_checks(
             PNG of the plot. Defaults to False.
 
     Returns:
-        Dict[str, AssumptionResult]: _description_
+        Dict[str, AssumptionResult]: A dictionary of assumption names
+            mapped to their result objects.
     """
     results = {}
     for name, func in ASSUMPTION_CHECKS.items():

@@ -21,7 +21,10 @@ def check_homoscedasticity(
             PNG of the plot. Defaults to False.
 
     Returns:
-        AssumptionResult
+        AssumptionResult: An object containing the outcome of the
+            assumption check, including whether the check passed,
+            a summary message, diagnostic details, optional residuals
+            and fitted values, and an optional base64-encoded plot.
     """
     X_reshaped = X.values.reshape(-1, 1)
     model = sm.OLS(y, sm.add_constant(X_reshaped)).fit()
@@ -38,7 +41,7 @@ def check_homoscedasticity(
         ax.axhline(0, color="red", linestyle="--")
         ax.set_xlabel("Fitted values")
         ax.set_ylabel("Residuals")
-        ax.set_title("Residuals vs Fitted (homoscedasticity Check)")
+        ax.set_title("Residuals vs Fitted (Homoscedasticity Check)")
         encoded = fig_to_base64(fig)
     else:
         encoded = None

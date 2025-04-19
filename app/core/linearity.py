@@ -21,7 +21,10 @@ def check_linearity(
             PNG of the plot. Defaults to False.
 
     Returns:
-        AssumptionResult
+        AssumptionResult: An object containing the outcome of the
+            assumption check, including whether the check passed,
+            a summary message, diagnostic details, optional residuals
+            and fitted values, and an optional base64-encoded plot.
     """
     X_reshaped = X.values.reshape(-1, 1)
     model = LinearRegression().fit(X_reshaped, y)

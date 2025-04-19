@@ -7,6 +7,8 @@ import numpy as np
 
 @dataclass
 class AssumptionResult:
+    """Represents the result of a single statistical assumption check."""
+
     name: str
     passed: bool
     summary: str
