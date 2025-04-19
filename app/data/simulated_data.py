@@ -5,7 +5,7 @@ import pandas as pd
 def generate_linear_data(
     n_samples: int = 100, noise_std: float = 1.0, seed: int | list = None
 ) -> pd.DataFrame:
-    """Generate simpole linear data: y = 3x + noise"""
+    """Generate simple linear data: y = 3x + noise"""
     rng = np.random.default_rng(seed)
     X = rng.normal(0, 1, size=n_samples)
     noise = rng.normal(0, noise_std, size=n_samples)
@@ -45,3 +45,12 @@ def generate_nonlinear_data(
     noise = rng.normal(0, 0.3, size=n_samples)
     y = np.sin(X) + noise
     return pd.DataFrame({"x": X, "y": y})
+
+
+def list_simulations() -> dict:
+    return {
+        "linear": generate_linear_data,
+        "heteroskedastic": generate_heteroskedastic_data,
+        "multicollinear": generate_multicollinear_data,
+        "nonlinear": generate_nonlinear_data,
+    }
