@@ -73,7 +73,7 @@ def check_linearity(
         name="linearity",
         passed=passed,
         summary=f"R² = {r2:.2f} → {'Pass' if passed else 'Fail'}",
-        details={"r_squared": r2},
+        details={"r_squared": r2, "r2_threshold": LINEARITY_R2_THRESHOLD},
         residuals=residuals,
         fitted=y_pred,
         plot_base64=encoded,

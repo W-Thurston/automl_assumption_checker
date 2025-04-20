@@ -3,6 +3,9 @@ from typing import Dict
 
 import pandas as pd
 
+from app.core import homoscedasticity  # noqa: F401
+from app.core import linearity  # noqa: F401
+from app.core import normality  # noqa: F401
 from app.core.registry import ASSUMPTION_CHECKS
 from app.core.types import AssumptionResult
 

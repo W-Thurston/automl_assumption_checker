@@ -75,7 +75,10 @@ def check_homoscedasticity(
         name="homoscedasticity",
         passed=passed,
         summary=f"Breusch-Pagan p = {pval:.4f} → {'Pass' if passed else 'Fail'}",
-        details={"breusch_pagan_pval": pval},
+        details={
+            "breusch_pagan_pval": pval,
+            "homoscedasticity_pval_threshold": HOMOSCEDASTICITY_PVAL_THRESHOLD,
+        },
         residuals=residuals,
         fitted=fitted,
         plot_base64=encoded,
