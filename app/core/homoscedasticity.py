@@ -1,7 +1,10 @@
 # app/core/homoscedasticity.py
 """
-Check homoscedasticity assumption using Breusch-Pagan test
-    and residuals vs fitted plot.
+Check homoscedasticity assumption using:
+    - Plots:
+        - Residuals vs fitted plot.
+    - Statistical tests:
+        - Breusch-Pagan test
 """
 
 import matplotlib.pyplot as plt
@@ -22,7 +25,11 @@ def check_homoscedasticity(
     X: pd.Series, y: pd.Series, return_plot: bool = False
 ) -> AssumptionResult:
     """
-    Check for homoscedasticity using residual vs fitted plot and Breusch-Pagan test.
+    Check homoscedasticity assumption using:
+    - Plots:
+        - Residuals vs fitted plot.
+    - Statistical tests:
+        - Breusch-Pagan test
 
     Args:
         X (pd.Series): Predictor (1D)

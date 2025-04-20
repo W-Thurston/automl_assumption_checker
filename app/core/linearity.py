@@ -1,6 +1,10 @@
 # app/core/linearity.py
 """
-Check linearity assumption using residuals vs fitted plot and R².
+Check linearity assumption using:
+    - Plots:
+        - Residuals vs fitted plot
+    - Statistical tests:
+        - R²
 """
 
 import matplotlib.pyplot as plt
@@ -21,7 +25,11 @@ def check_linearity(
     X: pd.Series, y: pd.Series, return_plot: bool = False
 ) -> AssumptionResult:
     """
-    Perform a linearity check using residuals vs fitted plot and R².
+    Check linearity assumption using:
+    - Plots:
+        - Residuals vs fitted plot
+    - Statistical tests:
+        - R²
 
     Args:
         X (pd.Series): Predictor (1D)

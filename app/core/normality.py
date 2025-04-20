@@ -1,10 +1,13 @@
 # app/core/normality.py
 """
-Check normality assumption using Q-Q plot, historgram, and
-the statistical tests:
-    - Shapiro-Wilk test
-    - D'Agostino and Pearson's test
-    - Anderson-Darling test
+Check normality assumption using:
+    - Plots:
+        - Q-Q plot
+        - Historgram
+    - Statistical tests:
+        - Shapiro-Wilk test
+        - D'Agostino and Pearson's test
+        - Anderson-Darling test
 """
 
 import matplotlib.pyplot as plt
@@ -25,8 +28,14 @@ def check_normality(
     X: pd.Series, y: pd.Series, return_plot: bool = False
 ) -> AssumptionResult:
     """
-    Check normality assumption using Q-Q plot, historgram, and
-    the statistical tests: Shapiro-Wilk and Normaltest
+    Check normality assumption using:
+    - Plots:
+        - Q-Q plot
+        - Historgram
+    - Statistical tests:
+        - Shapiro-Wilk test
+        - D'Agostino and Pearson's test
+        - Anderson-Darling test
 
     Args:
         X (pd.Series): Predictor (1D)
