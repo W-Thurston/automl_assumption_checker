@@ -27,10 +27,10 @@
 
 ### Upcoming
 
-- Add `multicollinearity.py` assumption checker
-- Add `independence.py` assumption checker
-- Add `influence.py` assumption checker
-- Add `outliers.py` assumption checker
-- Add `missingness.py` assumption checker
+- Planned `multicollinearity.py` assumption checker
+- Planned `independence.py` assumption checker
+- Planned `influence.py` assumption checker
+- Planned `outliers.py` assumption checker
+- Planned `missingness.py` assumption checker
 - Streamlit-based visual report interface
 - CLI wrapper with CSV input support

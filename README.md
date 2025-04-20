@@ -62,17 +62,22 @@ python app/main.py
 
 # For now: Generate report on simulated data
 python app/report.py
+
+# Output (console):
+# ✅ Assumption: Linearity
+#    R² = 0.86 → Pass
+#    Recommendation: —
 ```
-
-## 🔴 Live Demo
-
-[Launch the interactive version (coming soon)](#)
 
 ## 🧪 Tests
 
 ```bash
 pytest tests/
 ```
+
+## 🔴 Live Demo
+
+[Launch the interactive version (coming soon)](#)
 
 ## 📦 Docker (coming soon)
 
