@@ -1,3 +1,4 @@
+# app/main.py
 def main():
     print("Welcome to the AutoML Assumption Checker")
 
