@@ -109,25 +109,28 @@ def check_normality(
             }
         )
 
+    overall_str = "Pass (≥ 2 of 3 passed)" if passed else "Fail (≤ 2 of 3 passed)"
+
     # Package the diagnostic results using the shared builder
     return build_result(
         name="normality",
         passed=passed,
         summary=(
-            f"Shapiro-Wilk p = {shapiro_pval:.4f} →  "
-            f"({'Pass' if shapiro_passed else 'Fail'}), "
+            f"Shapiro-Wilk p = {shapiro_pval:.4f} → "
+            f"{'Pass' if shapiro_passed else 'Fail'}, "
             f"D'Agostino p = {dagostino_pval:.4f} → "
-            f"({'Pass' if dagostino_passed else 'Fail'}), "
-            f"Anderson stat = {anderson_stat:.4f} (crit = {anderson_critical:.4f}) → "
+            f"{'Pass' if dagostino_passed else 'Fail'}, "
+            f"Anderson stat = {anderson_stat:.4f} < (crit = {anderson_critical:.4f}) → "
             f"{'Pass' if anderson_passed else 'Fail'}"
-            f" | Overall → {'Pass' if passed else 'Fail'}"
+            f" | Overall → {overall_str}"
         ),
         details={
             "shapiro_pval": shapiro_pval,
             "dagostino_pval": dagostino_pval,
             "anderson_stat": anderson_stat,
             "anderson_critical_5pct": anderson_critical,
-            "tests_used": [
+            "normality_pval_threshold": NORMALITY_PVAL_THRESHOLD,
+            "tests_used:": [
                 "Shapiro-Wilk (tests overall shape)",
                 "D'Agostino-Pearson (tests skew/kurtosis)",
                 "Anderson-Darling (emphasizes tails)",
