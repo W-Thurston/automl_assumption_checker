@@ -1,6 +1,10 @@
 # app/core/linearity.py
 """
-Check linearity assumption using residuals vs fitted plot and R².
+Check linearity assumption using:
+    - Plots:
+        - Residuals vs fitted plot
+    - Statistical tests:
+        - R²
 """
 
 import matplotlib.pyplot as plt
@@ -21,7 +25,11 @@ def check_linearity(
     X: pd.Series, y: pd.Series, return_plot: bool = False
 ) -> AssumptionResult:
     """
-    Perform a linearity check using residuals vs fitted plot and R².
+    Check linearity assumption using:
+    - Plots:
+        - Residuals vs fitted plot
+    - Statistical tests:
+        - R²
 
     Args:
         X (pd.Series): Predictor (1D)
@@ -32,6 +40,25 @@ def check_linearity(
     Returns:
         AssumptionResult: Structured diagnostic output.
     """
+    if isinstance(X, pd.DataFrame):
+        if X.shape[1] > 1:
+            return build_result(
+                name="linearity",
+                passed=True,
+                summary="Linearity check not run: only supports one predictor.",
+                details={
+                    "note": (
+                        "Linearity check skipped — "
+                        + "only valid for single predictor inputs."
+                    )
+                },
+                plot_base64=None,
+                severity="low",
+                recommendation=None,
+                flag="info",
+            )
+        X = X.iloc[:, 0]  # Convert to Series
+
     # Fit simple linear model to input data
     X_reshaped = X.values.reshape(-1, 1)
     model = LinearRegression().fit(X_reshaped, y)

@@ -1,7 +1,10 @@
 # app/core/homoscedasticity.py
 """
-Check homoscedasticity assumption using Breusch-Pagan test
-    and residuals vs fitted plot.
+Check homoscedasticity assumption using:
+    - Plots:
+        - Residuals vs fitted plot.
+    - Statistical tests:
+        - Breusch-Pagan test
 """
 
 import matplotlib.pyplot as plt
@@ -22,7 +25,11 @@ def check_homoscedasticity(
     X: pd.Series, y: pd.Series, return_plot: bool = False
 ) -> AssumptionResult:
     """
-    Check for homoscedasticity using residual vs fitted plot and Breusch-Pagan test.
+    Check homoscedasticity assumption using:
+    - Plots:
+        - Residuals vs fitted plot.
+    - Statistical tests:
+        - Breusch-Pagan test
 
     Args:
         X (pd.Series): Predictor (1D)
@@ -32,15 +39,16 @@ def check_homoscedasticity(
     Returns:
         AssumptionResult: Structured diagnostic output.
     """
+    if isinstance(X, pd.Series):
+        X = X.to_frame()
 
     # Fit OLS model using statsmodels
-    X_reshaped = X.values.reshape(-1, 1)
-    model = sm.OLS(y, sm.add_constant(X_reshaped)).fit()
+    model = sm.OLS(y, sm.add_constant(X)).fit()
     residuals = model.resid
     fitted = model.fittedvalues
 
     # Breusch-Pagan test checks for non-constant residual variance
-    _, pval, _, _ = het_breuschpagan(residuals, sm.add_constant(X_reshaped))
+    _, pval, _, _ = het_breuschpagan(residuals, sm.add_constant(X))
     passed = pval > HOMOSCEDASTICITY_PVAL_THRESHOLD
 
     # Classify severity of violation based on p-value
