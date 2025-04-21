@@ -45,10 +45,11 @@ def check_normality(
     Returns:
         AssumptionResult: Structured diagnostic output.
     """
+    if isinstance(X, pd.Series):
+        X = X.to_frame()
 
     # Assure correct formatting of X values
-    X_reshaped = X.values.reshape(-1, 1)
-    model = sm.OLS(y, sm.add_constant(X_reshaped)).fit()
+    model = sm.OLS(y, sm.add_constant(X)).fit()
     residuals = model.resid
     fitted = model.fittedvalues
 

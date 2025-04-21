@@ -39,15 +39,16 @@ def check_homoscedasticity(
     Returns:
         AssumptionResult: Structured diagnostic output.
     """
+    if isinstance(X, pd.Series):
+        X = X.to_frame()
 
     # Fit OLS model using statsmodels
-    X_reshaped = X.values.reshape(-1, 1)
-    model = sm.OLS(y, sm.add_constant(X_reshaped)).fit()
+    model = sm.OLS(y, sm.add_constant(X)).fit()
     residuals = model.resid
     fitted = model.fittedvalues
 
     # Breusch-Pagan test checks for non-constant residual variance
-    _, pval, _, _ = het_breuschpagan(residuals, sm.add_constant(X_reshaped))
+    _, pval, _, _ = het_breuschpagan(residuals, sm.add_constant(X))
     passed = pval > HOMOSCEDASTICITY_PVAL_THRESHOLD
 
     # Classify severity of violation based on p-value

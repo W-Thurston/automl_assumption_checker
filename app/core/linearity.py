@@ -40,6 +40,11 @@ def check_linearity(
     Returns:
         AssumptionResult: Structured diagnostic output.
     """
+    if isinstance(X, pd.DataFrame):
+        if X.shape[1] > 1:
+            raise ValueError("Linearity check currently supports only one predictor.")
+        X = X.iloc[:, 0]  # Convert to Series
+
     # Fit simple linear model to input data
     X_reshaped = X.values.reshape(-1, 1)
     model = LinearRegression().fit(X_reshaped, y)
