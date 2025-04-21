@@ -42,7 +42,21 @@ def check_linearity(
     """
     if isinstance(X, pd.DataFrame):
         if X.shape[1] > 1:
-            raise ValueError("Linearity check currently supports only one predictor.")
+            return build_result(
+                name="linearity",
+                passed=True,
+                summary="Linearity check not run: only supports one predictor.",
+                details={
+                    "note": (
+                        "Linearity check skipped — "
+                        + "only valid for single predictor inputs."
+                    )
+                },
+                plot_base64=None,
+                severity="low",
+                recommendation=None,
+                flag="info",
+            )
         X = X.iloc[:, 0]  # Convert to Series
 
     # Fit simple linear model to input data

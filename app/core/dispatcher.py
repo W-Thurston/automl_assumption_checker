@@ -63,8 +63,5 @@ def run_all_checks(
         X = X.to_frame()
 
     for name, func in ASSUMPTION_CHECKS.items():
-        # Skip linearity if multivariate
-        if name == "linearity" and X.shape[1] > 1:
-            continue
         results[name] = func(X, y, return_plot)
     return results
