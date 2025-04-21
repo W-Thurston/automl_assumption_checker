@@ -15,6 +15,7 @@ from app.data.simulated_data import list_simulations
 def generate_report(
     X,
     y,
+    model_type=None,
     return_plot: bool = False,
     output_format: str = "console",
     verbose: bool = False,
@@ -23,7 +24,7 @@ def generate_report(
     Generate an assumption diagnostic report using the registered checks.
 
     Args:
-        X (pd.Series): Predictor values.
+        X (pd.Series or pd.DataFrame): Predictor values (1D or multivariate)
         y (pd.Series): Response values.
         return_plot (bool, optional): Include base64-encoded plots in results.
         output_format (str): 'console', 'json', or 'markdown'.
@@ -32,10 +33,12 @@ def generate_report(
     Raises:
         ValueError: If the output_format is not recognized.
     """
-    results = run_all_checks(X, y, return_plot=return_plot)
+    results, model_wrapper = run_all_checks(
+        X, y, model_type=model_type, return_plot=return_plot
+    )
 
     if output_format == "console":
-        print_console_report(results, verbose=verbose)
+        print_console_report(results, model_wrapper=model_wrapper, verbose=verbose)
     elif output_format == "json":
         export_to_json(results)
     elif output_format == "markdown":
@@ -44,7 +47,7 @@ def generate_report(
         raise ValueError("Unsupported output format")
 
 
-def print_console_report(results, verbose: bool = False):
+def print_console_report(results, model_wrapper, verbose: bool = False):
     """
     Print a structured Rich panel for each assumption result.
 
@@ -54,6 +57,11 @@ def print_console_report(results, verbose: bool = False):
     """
     console = Console()
     console.rule("[bold yellow]Assumption Check Report")
+
+    # Print mdoel metadata
+    model_info = model_wrapper.summary().get("model_type", "Unknown")
+    console.print(f"[bold cyan]Model Type:[/bold cyan] {model_info}")
+
     for name, result in results.items():
 
         # Determine pass/fail icon and panel title
@@ -198,12 +206,21 @@ def export_to_markdown(results, filename: str = None):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Run regression assumption checks.")
+
+    parser = argparse.ArgumentParser(
+        description="Run statistical assumption checks for supervised models."
+    )
     parser.add_argument(
         "--data",
         choices=list_simulations().keys(),
         default="linear",
         help="Which simulated dataset to run assumption checks on.",
+    )
+    parser.add_argument(
+        "--model-type",
+        choices=["linear"],
+        default="linear",
+        help="Which model to fit for diagnostics.",
     )
     parser.add_argument(
         "--format",
@@ -222,6 +239,10 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+    diagnostic_context = {
+        "model_type": args.model_type,
+    }
+
     data_func = list_simulations()[args.data]
     df = data_func(seed=42)
 
@@ -230,5 +251,10 @@ if __name__ == "__main__":
     y = df["y"]
 
     generate_report(
-        X, y, return_plot=args.plot, output_format=args.format, verbose=args.verbose
+        X,
+        y,
+        model_type=args.model_type,
+        return_plot=args.plot,
+        output_format=args.format,
+        verbose=args.verbose,
     )
