@@ -5,6 +5,7 @@ import pandas as pd
 
 from app.core import homoscedasticity  # noqa: F401
 from app.core import linearity  # noqa: F401
+from app.core import multicollinearity  # noqa: F401
 from app.core import normality  # noqa: F401
 from app.core.registry import ASSUMPTION_CHECKS
 from app.core.types import AssumptionResult
@@ -34,6 +35,9 @@ def check_assumption(
     if name not in ASSUMPTION_CHECKS:
         raise ValueError(f"Unknown assumption: '{name}'")
 
+    if isinstance(X, pd.Series):
+        X = X.to_frame()
+
     return ASSUMPTION_CHECKS[name](X, y, return_plot)
 
 
@@ -54,6 +58,13 @@ def run_all_checks(
             mapped to their result objects.
     """
     results = {}
+
+    if isinstance(X, pd.Series):
+        X = X.to_frame()
+
     for name, func in ASSUMPTION_CHECKS.items():
+        # Skip linearity if multivariate
+        if name == "linearity" and X.shape[1] > 1:
+            continue
         results[name] = func(X, y, return_plot)
     return results
