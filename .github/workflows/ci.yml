@@ -49,7 +49,7 @@ jobs:
 
     - name: 📦 Install minimal dependencies
       run: |
-        pip install pytest
+        pip install -r requirements.txt
 
     - name: 🚀 Run fast tests only
       run: |
