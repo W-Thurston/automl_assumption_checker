@@ -19,7 +19,8 @@ def generate_report(
     return_plot: bool = False,
     output_format: str = "console",
     verbose: bool = False,
-):
+) -> None:
+
     """
     Generate an assumption diagnostic report using the registered checks.
 
@@ -29,10 +30,11 @@ def generate_report(
         return_plot (bool, optional): Include base64-encoded plots in results.
         output_format (str): 'console', 'json', or 'markdown'.
         verbose (bool): If True, includes extra detail in console output.
-
+        
     Raises:
         ValueError: If the output_format is not recognized.
     """
+
     results, model_wrapper = run_all_checks(
         X, y, model_type=model_type, return_plot=return_plot
     )
@@ -45,6 +47,7 @@ def generate_report(
         export_to_markdown(results)
     else:
         raise ValueError("Unsupported output format")
+
 
 
 def print_console_report(results, model_wrapper, verbose: bool = False):
@@ -63,7 +66,6 @@ def print_console_report(results, model_wrapper, verbose: bool = False):
     console.print(f"[bold cyan]Model Type:[/bold cyan] {model_info}")
 
     for name, result in results.items():
-
         # Determine pass/fail icon and panel title
         icon = "✅" if result.passed else "⚠️"
         panel_title = f"{icon} {name.title()}"
@@ -79,6 +81,7 @@ def print_console_report(results, model_wrapper, verbose: bool = False):
             summary_text = summary_text.replace("→ Fail", "→ [red]Fail[/red]")
 
         # Lookup comparison operator and threshold for each metric
+        # Mapping between metrics and comparison operator
         metric_comparisons = {
             "r_squared": "≥",
             "breusch_pagan_pval": "≥",
@@ -98,7 +101,6 @@ def print_console_report(results, model_wrapper, verbose: bool = False):
 
         # Format each detail line with aligned label, operator, and threshold comparison
         formatted_details = []
-
         for key, val in result.details.items():
             if key in metric_threshold_pairs:
                 threshold_key = metric_threshold_pairs[key]
@@ -173,7 +175,14 @@ def print_console_report(results, model_wrapper, verbose: bool = False):
         )
 
 
-def export_to_json(results, filename: str = None):
+def export_to_json(results, filename: str = None) -> None:
+    """
+    Save data to json file.
+
+    Args:
+        results (dict): Assumption names mapped to AssumptionResult objects.
+        filename (str, optional): Output filename. Defaults to None.
+    """
     payload = {k: r.__dict__ for k, r in results.items()}
 
     # Default to timestamped filename if none provided
@@ -185,7 +194,14 @@ def export_to_json(results, filename: str = None):
     print(f"✅ Report saved to {filename}")
 
 
-def export_to_markdown(results, filename: str = None):
+def export_to_markdown(results, filename: str = None) -> None:
+    """
+    Save data to markdown file.
+
+    Args:
+        results (dict): Assumption names mapped to AssumptionResult objects.
+        filename (str, optional): Output filename. Defaults to None.
+    """
     lines = ["# Assumption Check Report\n"]
     for name, r in results.items():
         icon = "✅" if r.passed else "⚠️"
