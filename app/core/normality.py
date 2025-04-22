@@ -1,10 +1,13 @@
 # app/core/normality.py
 """
-Check normality assumption using Q-Q plot, historgram, and
-the statistical tests:
-    - Shapiro-Wilk test
-    - D'Agostino and Pearson's test
-    - Anderson-Darling test
+Check normality assumption using:
+    - Plots:
+        - Q-Q plot
+        - Historgram
+    - Statistical tests:
+        - Shapiro-Wilk test
+        - D'Agostino and Pearson's test
+        - Anderson-Darling test
 """
 
 import matplotlib.pyplot as plt
@@ -20,13 +23,19 @@ from app.utils import build_result, classify_severity, fig_to_base64
 __all__ = ["check_normality"]
 
 
-@register_assumption("normality")
+@register_assumption("normality", model_types=["linear"])
 def check_normality(
-    X: pd.Series, y: pd.Series, return_plot: bool = False
+    X: pd.Series, y: pd.Series, return_plot: bool = False, model_wrapper=None
 ) -> AssumptionResult:
     """
-    Check normality assumption using Q-Q plot, historgram, and
-    the statistical tests: Shapiro-Wilk and Normaltest
+    Check normality assumption using:
+    - Plots:
+        - Q-Q plot
+        - Historgram
+    - Statistical tests:
+        - Shapiro-Wilk test
+        - D'Agostino and Pearson's test
+        - Anderson-Darling test
 
     Args:
         X (pd.Series): Predictor (1D)
@@ -36,12 +45,18 @@ def check_normality(
     Returns:
         AssumptionResult: Structured diagnostic output.
     """
+    if isinstance(X, pd.Series):
+        X = X.to_frame()
 
-    # Assure correct formatting of X values
-    X_reshaped = X.values.reshape(-1, 1)
-    model = sm.OLS(y, sm.add_constant(X_reshaped)).fit()
-    residuals = model.resid
-    fitted = model.fittedvalues
+    # Guard for if model_wrapper is None
+    if model_wrapper is None:
+        from app.models.utils import get_model_wrapper
+
+        model_wrapper = get_model_wrapper("linear", X, y)
+
+    # Fit simple linear model to input data
+    residuals = model_wrapper.residuals()
+    y_pred = model_wrapper.fitted()
 
     # Shapiro-Wilks test checks if data comes from a normally distributed population
     _, shapiro_pval = shapiro(residuals)
@@ -137,7 +152,7 @@ def check_normality(
             ],
         },
         residuals=residuals,
-        fitted=fitted,
+        fitted=y_pred,
         plots=plots,
         severity=severity,
         recommendation=recommendation,

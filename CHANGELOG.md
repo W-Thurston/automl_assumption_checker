@@ -1,3 +1,46 @@
+## [0.2.1] - 2025-04-22 [🔗](https://github.com/W-Thurston/automl_assumption_checker/releases/tag/v0.2.1)
+
+### Refactored
+- Implemented ModelWrapper architecture in the following linear model assumptions:
+  - homoscedasticity
+  - normality
+  - multicollinearity
+
+## [0.2.0] - 2025-04-20 [🔗](https://github.com/W-Thurston/automl_assumption_checker/releases/tag/v0.2.0)
+
+### Added
+
+- Introduced `ModelWrapper` abstraction layer:
+  - Base interface `BaseModelWrapper`
+  - `LinearModelWrapper` implementation for `statsmodels.OLS`
+  - Shared `get_model_wrapper()` factory in `models/utils.py`
+- Shared model now fit once and reused across all assumption checks
+- `--model-type` CLI flag in `report.py` (currently supports `"linear"`)
+- Console report now prints model metadata using `model_wrapper.summary()`
+- Assumption check registry (`register_assumption`) extended to support model filtering via `model_types`
+- Centralized `run_all_checks()` returns both results and model instance
+- Updated `linearity.py` to use shared model wrapper for residuals and fitted values
+- Auto-skips linearity check with multivariate input but shows informative output panel
+
+### Changed
+
+- Function parameter order across assumption checks standardized:
+  - Optional arguments like `model_wrapper` now follow `return_plot` for readability
+- Assumption checks now accept `model_wrapper` as a shared input
+- Dispatcher updated to enforce model compatibility filtering by `model_type`
+
+### Fixed
+
+- CLI crash when `model_type` was not explicitly passed
+- Alignment inconsistencies in verbose mode console report
+
+### Upcoming
+
+- Refactor `normality`, `homoscedasticity`, and `multicollinearity` to use `model_wrapper`
+- Add new assumptions: `influence`, `outliers`, `independence`, `missingness`
+- Enable diagnostics for multivariate inputs
+- Full v1.0.0 milestone to mark linear regression support completion
+
 ## [0.1.0] - 2025-04-19 [🔗](https://github.com/W-Thurston/automl_assumption_checker/releases/tag/v0.1.0)
 
 ### Added

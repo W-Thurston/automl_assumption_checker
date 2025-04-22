@@ -1,6 +1,7 @@
 # tests/test_homoscedasticity.py
 from app.core import homoscedasticity
 from app.data import simulated_data
+from app.models.linear_model_wrapper import LinearModelWrapper
 
 
 def test_homoscedasticity_check_passes_on_linear_data():
@@ -21,3 +22,16 @@ def test_homoscedasticity_plot_generation():
     result = homoscedasticity.check_homoscedasticity(df["x"], df["y"], return_plot=True)
     assert result.plot_base64 is not None
     assert result.plot_base64.startswith("iVBOR")
+
+
+def test_homoscedasticity_with_model_wrapper():
+    """
+    Ensure check_homoscedasticity works when a pre-fit model_wrapper is provided.
+    """
+    df = simulated_data.generate_linear_data(seed=123)
+    wrapper = LinearModelWrapper(df["x"], df["y"]).fit()
+
+    result = homoscedasticity.check_homoscedasticity(
+        df["x"], df["y"], model_wrapper=wrapper
+    )
+    assert "breusch_pagan_pval" in result.details

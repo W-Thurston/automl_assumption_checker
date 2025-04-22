@@ -1,5 +1,6 @@
 # app/report.py
 
+import argparse
 import json
 from datetime import datetime
 
@@ -8,36 +9,38 @@ from rich.panel import Panel
 from rich.table import Table
 
 from app.core.dispatcher import run_all_checks
-from app.data.simulated_data import generate_linear_data
+from app.data.simulated_data import list_simulations
 
 
 def generate_report(
     X,
     y,
+    model_type=None,
     return_plot: bool = False,
     output_format: str = "console",
     verbose: bool = False,
 ) -> None:
+
     """
     Generate an assumption diagnostic report using the registered checks.
 
     Args:
-        X (pd.Series): Predictor (1D)
-        y (pd.Series): Response (1D)
-        return_plot (bool, optional): Whether to return base64-encoded
-            PNG of the plot. Defaults to False.
-        output_format (str, optional): 'console', 'json', or 'markdown'.
-            Defaults to "console".
-        verbose (bool, optional): If True, includes extra detail in console output.
-            Defaults to False.
-
+        X (pd.Series or pd.DataFrame): Predictor values (1D or multivariate)
+        y (pd.Series): Response values.
+        return_plot (bool, optional): Include base64-encoded plots in results.
+        output_format (str): 'console', 'json', or 'markdown'.
+        verbose (bool): If True, includes extra detail in console output.
+        
     Raises:
         ValueError: If the output_format is not recognized.
     """
-    results = run_all_checks(X, y, return_plot=return_plot)
+
+    results, model_wrapper = run_all_checks(
+        X, y, model_type=model_type, return_plot=return_plot
+    )
 
     if output_format == "console":
-        print_console_report(results, verbose=verbose)
+        print_console_report(results, model_wrapper=model_wrapper, verbose=verbose)
     elif output_format == "json":
         export_to_json(results)
     elif output_format == "markdown":
@@ -46,17 +49,22 @@ def generate_report(
         raise ValueError("Unsupported output format")
 
 
-def print_console_report(results, verbose: bool = False) -> None:
+
+def print_console_report(results, model_wrapper, verbose: bool = False):
     """
     Print a structured Rich panel for each assumption result.
 
     Args:
         results (dict): Assumption names mapped to AssumptionResult objects.
-        verbose (bool, optional): If True, includes details like thresholds
-            and comparisons. Defaults to False.
+        verbose (bool): If True, includes details like thresholds and comparisons.
     """
     console = Console()
     console.rule("[bold yellow]Assumption Check Report")
+
+    # Print mdoel metadata
+    model_info = model_wrapper.summary().get("model_type", "Unknown")
+    console.print(f"[bold cyan]Model Type:[/bold cyan] {model_info}")
+
     for name, result in results.items():
         # Determine pass/fail icon and panel title
         icon = "✅" if result.passed else "⚠️"
@@ -72,6 +80,7 @@ def print_console_report(results, verbose: bool = False) -> None:
         elif "→ Fail" in summary_text:
             summary_text = summary_text.replace("→ Fail", "→ [red]Fail[/red]")
 
+        # Lookup comparison operator and threshold for each metric
         # Mapping between metrics and comparison operator
         metric_comparisons = {
             "r_squared": "≥",
@@ -103,6 +112,18 @@ def print_console_report(results, verbose: bool = False) -> None:
                     threshold_fmt = f"{threshold_val:.4f}"
                     formatted_details.append((name_fmt, comp, value_fmt, threshold_fmt))
                     continue  # skip to next, don't double-append
+            # Match feature VIF + threshold pairs dynamically
+            elif key.lower().endswith("(vif)"):
+                feature = key[:-6].strip().lower()  # remove " (vif)"
+                threshold_key = f"{feature} threshold"
+                threshold_val = result.details.get(threshold_key)
+                if threshold_val is not None:
+                    comp = "≤"
+                    name_fmt = key
+                    value_fmt = f"{val:.4f}"
+                    threshold_fmt = f"{threshold_val:.4f}"
+                    formatted_details.append((name_fmt, comp, value_fmt, threshold_fmt))
+                    continue
             elif "threshold" not in key:
                 name_fmt = key.replace("_", " ").capitalize()
                 if isinstance(val, list):
@@ -201,7 +222,55 @@ def export_to_markdown(results, filename: str = None) -> None:
 
 
 if __name__ == "__main__":
-    df = generate_linear_data(seed=42)
+
+    parser = argparse.ArgumentParser(
+        description="Run statistical assumption checks for supervised models."
+    )
+    parser.add_argument(
+        "--data",
+        choices=list_simulations().keys(),
+        default="linear",
+        help="Which simulated dataset to run assumption checks on.",
+    )
+    parser.add_argument(
+        "--model-type",
+        choices=["linear"],
+        default="linear",
+        help="Which model to fit for diagnostics.",
+    )
+    parser.add_argument(
+        "--format",
+        choices=["console", "json", "markdown"],
+        default="console",
+        help="Output format.",
+    )
+    parser.add_argument(
+        "--verbose",
+        action="store_true",
+        help="Include detailed threshold info in report.",
+    )
+    parser.add_argument(
+        "--plot", action="store_true", help="Include base64-encoded plots."
+    )
+
+    args = parser.parse_args()
+
+    diagnostic_context = {
+        "model_type": args.model_type,
+    }
+
+    data_func = list_simulations()[args.data]
+    df = data_func(seed=42)
+
+    # Choose predictors dynamically
+    X = df.drop(columns="y")
+    y = df["y"]
+
     generate_report(
-        df["x"], df["y"], return_plot=True, output_format="console", verbose=True
+        X,
+        y,
+        model_type=args.model_type,
+        return_plot=args.plot,
+        output_format=args.format,
+        verbose=args.verbose,
     )

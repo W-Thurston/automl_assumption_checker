@@ -1,11 +1,14 @@
 # app/core/linearity.py
 """
-Check linearity assumption using residuals vs fitted plot and R².
+Check linearity assumption using:
+    - Plots:
+        - Residuals vs fitted plot
+    - Statistical tests:
+        - R²
 """
 
 import matplotlib.pyplot as plt
 import pandas as pd
-from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
 
 from app.config import LINEARITY_R2_THRESHOLD, R2_SEVERITY_THRESHOLDS
@@ -16,12 +19,16 @@ from app.utils import build_result, classify_severity, fig_to_base64
 __all__ = ["check_linearity"]
 
 
-@register_assumption("linearity")
+@register_assumption("linearity", model_types=["linear"])
 def check_linearity(
-    X: pd.Series, y: pd.Series, return_plot: bool = False
+    X: pd.Series, y: pd.Series, return_plot: bool = False, model_wrapper=None
 ) -> AssumptionResult:
     """
-    Perform a linearity check using residuals vs fitted plot and R².
+    Check linearity assumption using:
+    - Plots:
+        - Residuals vs fitted plot
+    - Statistical tests:
+        - R²
 
     Args:
         X (pd.Series): Predictor (1D)
@@ -32,11 +39,34 @@ def check_linearity(
     Returns:
         AssumptionResult: Structured diagnostic output.
     """
+    if isinstance(X, pd.DataFrame):
+        if X.shape[1] > 1:
+            return build_result(
+                name="linearity",
+                passed=True,
+                summary="Linearity check not run: only supports one predictor.",
+                details={
+                    "note": (
+                        "Linearity check skipped — "
+                        + "only valid for single predictor inputs."
+                    )
+                },
+                plot_base64=None,
+                severity="low",
+                recommendation=None,
+                flag="info",
+            )
+        X = X.iloc[:, 0]  # Convert to Series
+
+    # Guard for if model_wrapper is None
+    if model_wrapper is None:
+        from app.models.utils import get_model_wrapper
+
+        model_wrapper = get_model_wrapper("linear", X, y)
+
     # Fit simple linear model to input data
-    X_reshaped = X.values.reshape(-1, 1)
-    model = LinearRegression().fit(X_reshaped, y)
-    y_pred = model.predict(X_reshaped)
-    residuals = y - y_pred
+    residuals = model_wrapper.residuals()
+    y_pred = model_wrapper.fitted()
 
     # Coefficient of determination (R²) measures goodness of fit
     r2 = r2_score(y, y_pred)
