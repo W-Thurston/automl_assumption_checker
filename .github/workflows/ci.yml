@@ -2,13 +2,15 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, dev, staging ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, dev, staging ]
 
 jobs:
   build-and-test:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    name: 🧪 Full Test Suite
 
     steps:
     - name: 🔄 Checkout code
@@ -30,3 +32,25 @@ jobs:
 
     - name: 🐳 Build Docker image
       run: docker build -t automl-checker .
+
+  quick-check:
+    if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/staging'
+    runs-on: ubuntu-latest
+    name: ⚡ Quick Check
+
+    steps:
+    - name: 🔄 Checkout code
+      uses: actions/checkout@v3
+
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12.10'
+
+    - name: 📦 Install minimal dependencies
+      run: |
+        pip install pytest
+
+    - name: 🚀 Run fast tests only
+      run: |
+        pytest tests/test_dispatcher.py tests/test_linearity.py
