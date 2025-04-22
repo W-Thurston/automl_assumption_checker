@@ -14,7 +14,9 @@ ASSUMPTION_CHECKS: Dict[
 AssumptionCheck = Callable[[pd.Series, pd.Series, bool], AssumptionResult]
 
 
-def register_assumption(name: str) -> Callable[[AssumptionCheck], AssumptionCheck]:
+def register_assumption(
+    name: str, model_types: list = ["linear"]
+) -> Callable[[AssumptionCheck], AssumptionCheck]:
     """
     Decorator to register an assumption check function under a given name.
 
@@ -26,6 +28,8 @@ def register_assumption(name: str) -> Callable[[AssumptionCheck], AssumptionChec
     """
 
     def decorator(func: AssumptionCheck) -> AssumptionCheck:
+        func._assumption_name = name
+        func._model_types = model_types
         ASSUMPTION_CHECKS[name] = func
         return func
 

@@ -20,7 +20,7 @@ def test_dispatch_all_assumptions():
     Test dispatcher's run_all_checks().
     """
     df = simulated_data.generate_linear_data(n_samples=300, seed=42)
-    results = dispatcher.run_all_checks(df["x"], df["y"])
+    results, _ = dispatcher.run_all_checks(df["x"], df["y"], model_type="linear")
     assert "linearity" in results
     assert "homoscedasticity" in results
     assert results["linearity"].passed
