@@ -20,9 +20,9 @@ from app.utils import build_result, classify_severity, fig_to_base64
 __all__ = ["check_multicollinearity"]
 
 
-@register_assumption("multicollinearity")
+@register_assumption("multicollinearity", model_types=["linear"])
 def check_multicollinearity(
-    X: pd.DataFrame, y: pd.Series, return_plot: bool = False
+    X: pd.DataFrame, y: pd.Series, return_plot: bool = False, model_wrapper=None
 ) -> AssumptionResult:
     """
     Check multicollinearity assumption using:

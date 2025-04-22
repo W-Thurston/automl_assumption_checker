@@ -9,7 +9,6 @@ Check linearity assumption using:
 
 import matplotlib.pyplot as plt
 import pandas as pd
-from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
 
 from app.config import LINEARITY_R2_THRESHOLD, R2_SEVERITY_THRESHOLDS
@@ -20,9 +19,9 @@ from app.utils import build_result, classify_severity, fig_to_base64
 __all__ = ["check_linearity"]
 
 
-@register_assumption("linearity")
+@register_assumption("linearity", model_types=["linear"])
 def check_linearity(
-    X: pd.Series, y: pd.Series, return_plot: bool = False
+    X: pd.Series, y: pd.Series, return_plot: bool = False, model_wrapper=None
 ) -> AssumptionResult:
     """
     Check linearity assumption using:
@@ -59,11 +58,15 @@ def check_linearity(
             )
         X = X.iloc[:, 0]  # Convert to Series
 
+    # Guard for if model_wrapper is None
+    if model_wrapper is None:
+        from app.models.utils import get_model_wrapper
+
+        model_wrapper = get_model_wrapper("linear", X, y)
+
     # Fit simple linear model to input data
-    X_reshaped = X.values.reshape(-1, 1)
-    model = LinearRegression().fit(X_reshaped, y)
-    y_pred = model.predict(X_reshaped)
-    residuals = y - y_pred
+    residuals = model_wrapper.residuals()
+    y_pred = model_wrapper.fitted()
 
     # Coefficient of determination (R²) measures goodness of fit
     r2 = r2_score(y, y_pred)
