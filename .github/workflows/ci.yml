@@ -53,4 +53,4 @@ jobs:
 
     - name: 🚀 Run fast tests only
       run: |
-        pytest tests/test_dispatcher.py tests/test_linearity.py
+        PYTHONPATH=./ pytest tests/test_dispatcher.py tests/test_linearity.py
