@@ -1,3 +1,11 @@
+## [0.2.1] - 2025-04-22 [🔗](https://github.com/W-Thurston/automl_assumption_checker/releases/tag/v0.2.1)
+
+### Refactored
+- Implemented ModelWrapper architecture in the following linear model assumptions:
+  - homoscedasticity
+  - normality
+  - multicollinearity
+
 ## [0.2.0] - 2025-04-20 [🔗](https://github.com/W-Thurston/automl_assumption_checker/releases/tag/v0.2.0)
 
 ### Added
