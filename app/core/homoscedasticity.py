@@ -20,9 +20,9 @@ from app.utils import build_result, classify_severity, fig_to_base64
 __all__ = ["check_homoscedasticity"]
 
 
-@register_assumption("homoscedasticity")
+@register_assumption("homoscedasticity", model_types=["linear"])
 def check_homoscedasticity(
-    X: pd.Series, y: pd.Series, return_plot: bool = False
+    X: pd.Series, y: pd.Series, return_plot: bool = False, model_wrapper=None
 ) -> AssumptionResult:
     """
     Check homoscedasticity assumption using:
@@ -42,10 +42,15 @@ def check_homoscedasticity(
     if isinstance(X, pd.Series):
         X = X.to_frame()
 
-    # Fit OLS model using statsmodels
-    model = sm.OLS(y, sm.add_constant(X)).fit()
-    residuals = model.resid
-    fitted = model.fittedvalues
+    # Guard for if model_wrapper is None
+    if model_wrapper is None:
+        from app.models.utils import get_model_wrapper
+
+        model_wrapper = get_model_wrapper("linear", X, y)
+
+    # Fit simple linear model to input data
+    residuals = model_wrapper.residuals()
+    y_pred = model_wrapper.fitted()
 
     # Breusch-Pagan test checks for non-constant residual variance
     _, pval, _, _ = het_breuschpagan(residuals, sm.add_constant(X))
@@ -71,7 +76,7 @@ def check_homoscedasticity(
     encoded = None
     if return_plot:
         fig, ax = plt.subplots()
-        ax.scatter(fitted, residuals, alpha=0.7)
+        ax.scatter(y_pred, residuals, alpha=0.7)
         ax.axhline(0, color="red", linestyle="--")
         ax.set_xlabel("Fitted values")
         ax.set_ylabel("Residuals")
@@ -88,7 +93,7 @@ def check_homoscedasticity(
             "homoscedasticity_pval_threshold": HOMOSCEDASTICITY_PVAL_THRESHOLD,
         },
         residuals=residuals,
-        fitted=fitted,
+        fitted=y_pred,
         plot_base64=encoded,
         severity=severity,
         recommendation=recommendation,

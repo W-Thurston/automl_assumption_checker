@@ -10,7 +10,7 @@ def test_single_feature_skips_check():
     y = 2 * X["x"] + np.random.normal(size=100)
 
     result = check_multicollinearity(X, y)
-    assert result.passed is True
+    assert result.passed
     assert "not applicable" in result.summary.lower()
 
 
@@ -25,7 +25,7 @@ def test_low_vif_passes():
     y = X["x1"] + X["x2"] + rng.normal(size=100)
 
     result = check_multicollinearity(X, y)
-    assert result.passed is True
+    assert result.passed
     for key in result.details:
         if "(VIF)" in key:
             assert result.details[key] < VIF_THRESHOLD
