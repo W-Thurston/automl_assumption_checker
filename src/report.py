@@ -1,5 +1,4 @@
-# app/report.py
-
+# src/report.py
 import argparse
 import json
 from datetime import datetime
@@ -8,8 +7,8 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
-from app.core.dispatcher import run_all_checks
-from app.data.simulated_data import list_simulations
+from src.core.dispatcher import run_all_checks
+from src.data.simulated_data import list_simulations
 
 
 def generate_report(

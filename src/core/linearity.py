@@ -1,4 +1,4 @@
-# app/core/linearity.py
+# src/core/linearity.py
 """
 Check linearity assumption using:
     - Plots:
@@ -11,10 +11,10 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.metrics import r2_score
 
-from app.config import LINEARITY_R2_THRESHOLD, R2_SEVERITY_THRESHOLDS
-from app.core.registry import register_assumption
-from app.core.types import AssumptionResult
-from app.utils import build_result, classify_severity, fig_to_base64
+from src.config import LINEARITY_R2_THRESHOLD, R2_SEVERITY_THRESHOLDS
+from src.core.registry import register_assumption
+from src.core.types import AssumptionResult
+from src.utils import build_result, classify_severity, fig_to_base64
 
 __all__ = ["check_linearity"]
 
@@ -60,7 +60,7 @@ def check_linearity(
 
     # Guard for if model_wrapper is None
     if model_wrapper is None:
-        from app.models.utils import get_model_wrapper
+        from src.models.utils import get_model_wrapper
 
         model_wrapper = get_model_wrapper("linear", X, y)
 

@@ -1,16 +1,16 @@
-# app/core/dispatcher.py
+# src/core/dispatcher.py
 from typing import Dict, Tuple
 
 import pandas as pd
 
-from app.core import homoscedasticity  # noqa: F401
-from app.core import linearity  # noqa: F401
-from app.core import multicollinearity  # noqa: F401
-from app.core import normality  # noqa: F401
-from app.core.registry import ASSUMPTION_CHECKS
-from app.core.types import AssumptionResult
-from app.models.base_model_wrapper import BaseModelWrapper
-from app.models.utils import get_model_wrapper
+from src.core import homoscedasticity  # noqa: F401
+from src.core import linearity  # noqa: F401
+from src.core import multicollinearity  # noqa: F401
+from src.core import normality  # noqa: F401
+from src.core.registry import ASSUMPTION_CHECKS
+from src.core.types import AssumptionResult
+from src.models.base_model_wrapper import BaseModelWrapper
+from src.models.utils import get_model_wrapper
 
 __all__ = ["check_assumption", "run_all_checks"]
 

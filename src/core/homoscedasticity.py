@@ -1,4 +1,4 @@
-# app/core/homoscedasticity.py
+# src/core/homoscedasticity.py
 """
 Check homoscedasticity assumption using:
     - Plots:
@@ -12,10 +12,10 @@ import pandas as pd
 import statsmodels.api as sm
 from statsmodels.stats.diagnostic import het_breuschpagan
 
-from app.config import HOMOSCEDASTICITY_PVAL_THRESHOLD, PVAL_SEVERITY_THRESHOLDS
-from app.core.registry import register_assumption
-from app.core.types import AssumptionResult
-from app.utils import build_result, classify_severity, fig_to_base64
+from src.config import HOMOSCEDASTICITY_PVAL_THRESHOLD, PVAL_SEVERITY_THRESHOLDS
+from src.core.registry import register_assumption
+from src.core.types import AssumptionResult
+from src.utils import build_result, classify_severity, fig_to_base64
 
 __all__ = ["check_homoscedasticity"]
 
@@ -44,7 +44,7 @@ def check_homoscedasticity(
 
     # Guard for if model_wrapper is None
     if model_wrapper is None:
-        from app.models.utils import get_model_wrapper
+        from src.models.utils import get_model_wrapper
 
         model_wrapper = get_model_wrapper("linear", X, y)
 

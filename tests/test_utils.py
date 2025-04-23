@@ -1,4 +1,5 @@
-from app.utils import build_result
+# tests/test_utils.py
+from src.utils import build_result
 
 
 def test_build_result_returns_valid_assumption_result():

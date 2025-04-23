@@ -1,7 +1,7 @@
 # tests/test_homoscedasticity.py
-from app.core import homoscedasticity
-from app.data import simulated_data
-from app.models.linear_model_wrapper import LinearModelWrapper
+from src.core import homoscedasticity
+from src.data import simulated_data
+from src.models.linear_model_wrapper import LinearModelWrapper
 
 
 def test_homoscedasticity_check_passes_on_linear_data():

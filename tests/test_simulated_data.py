@@ -2,7 +2,7 @@
 import numpy as np
 import statsmodels.api as sm
 
-from app.data import simulated_data
+from src.data import simulated_data
 
 
 def test_generate_linear_data_shape():

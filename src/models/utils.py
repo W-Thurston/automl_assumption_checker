@@ -1,5 +1,6 @@
-from app.models.base_model_wrapper import BaseModelWrapper
-from app.models.linear_model_wrapper import LinearModelWrapper
+# src/models/utils.py
+from src.models.base_model_wrapper import BaseModelWrapper
+from src.models.linear_model_wrapper import LinearModelWrapper
 
 
 def get_model_wrapper(model_type: str, X, y) -> BaseModelWrapper:

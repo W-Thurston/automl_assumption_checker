@@ -1,7 +1,7 @@
 # tests/test_linearity.py
-from app.core import linearity
-from app.data import simulated_data
-from app.models.linear_model_wrapper import LinearModelWrapper
+from src.core import linearity
+from src.data import simulated_data
+from src.models.linear_model_wrapper import LinearModelWrapper
 
 
 def test_linearity_r_squared_threshold():

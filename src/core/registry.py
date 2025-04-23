@@ -1,9 +1,9 @@
-# app/core/registry.py
+# src/core/registry.py
 from typing import Callable, Dict
 
 import pandas as pd
 
-from app.core.types import AssumptionResult
+from src.core.types import AssumptionResult
 
 __all__ = ["ASSUMPTION_CHECKS", "register_assumption"]
 

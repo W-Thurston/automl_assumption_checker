@@ -1,8 +1,9 @@
+# tests/test_multicollinearity.py
 import numpy as np
 import pandas as pd
 
-from app.config import VIF_THRESHOLD
-from app.core.multicollinearity import check_multicollinearity
+from src.config import VIF_THRESHOLD
+from src.core.multicollinearity import check_multicollinearity
 
 
 def test_single_feature_skips_check():

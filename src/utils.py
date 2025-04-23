@@ -1,4 +1,4 @@
-# app/utils.py
+# src/utils.py
 import base64
 import io
 from typing import Any, Dict, List, Optional
@@ -6,7 +6,7 @@ from typing import Any, Dict, List, Optional
 import matplotlib.pyplot as plt
 import numpy as np
 
-from app.core.types import AssumptionResult
+from src.core.types import AssumptionResult
 
 __all__ = ["fig_to_base64", "build_result", "classify_severity"]
 

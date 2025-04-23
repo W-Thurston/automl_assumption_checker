@@ -1,4 +1,4 @@
-# app/core/multicollinearity.py
+# src/core/multicollinearity.py
 """
 Check multicollinearity assumption using:
     - Plots:
@@ -12,10 +12,10 @@ import pandas as pd
 import seaborn as sns
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 
-from app.config import VIF_SEVERITY_THRESHOLDS, VIF_THRESHOLD
-from app.core.registry import register_assumption
-from app.core.types import AssumptionResult
-from app.utils import build_result, classify_severity, fig_to_base64
+from src.config import VIF_SEVERITY_THRESHOLDS, VIF_THRESHOLD
+from src.core.registry import register_assumption
+from src.core.types import AssumptionResult
+from src.utils import build_result, classify_severity, fig_to_base64
 
 __all__ = ["check_multicollinearity"]
 

@@ -1,7 +1,8 @@
+# tests/test_linear_model_wrapper.py
 import numpy as np
 import pandas as pd
 
-from app.models.linear_model_wrapper import LinearModelWrapper
+from src.models.linear_model_wrapper import LinearModelWrapper
 
 
 def test_linear_wrapper_fit_and_predict():

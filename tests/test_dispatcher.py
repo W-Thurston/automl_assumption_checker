@@ -1,8 +1,8 @@
 # tests/test_dispatcher.py
 import pytest
 
-from app.core import dispatcher
-from app.data import simulated_data
+from src.core import dispatcher
+from src.data import simulated_data
 
 
 def test_dispatch_single_assumption():

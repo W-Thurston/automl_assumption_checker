@@ -1,6 +1,7 @@
+# src/models/linear_model_wrapper.py
 import statsmodels.api as sm
 
-from app.models.base_model_wrapper import BaseModelWrapper
+from src.models.base_model_wrapper import BaseModelWrapper
 
 
 class LinearModelWrapper(BaseModelWrapper):

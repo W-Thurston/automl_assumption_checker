@@ -1,9 +1,10 @@
+# tests/test_model_utils.py
 import numpy as np
 import pandas as pd
 import pytest
 
-from app.models.linear_model_wrapper import LinearModelWrapper
-from app.models.utils import get_model_wrapper
+from src.models.linear_model_wrapper import LinearModelWrapper
+from src.models.utils import get_model_wrapper
 
 
 def test_get_model_wrapper_linear():

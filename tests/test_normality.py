@@ -1,6 +1,7 @@
-from app.core import normality
-from app.data import simulated_data
-from app.models.linear_model_wrapper import LinearModelWrapper
+# tests/test_normality.py
+from src.core import normality
+from src.data import simulated_data
+from src.models.linear_model_wrapper import LinearModelWrapper
 
 
 def test_normality_check_passes_on_normal_data():
