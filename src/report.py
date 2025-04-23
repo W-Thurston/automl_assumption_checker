@@ -85,6 +85,8 @@ def print_console_report(results, model_wrapper, verbose: bool = False):
             "dagostino_pval": "≥",
             "anderson_stat": "≤",
             "vif": "≤",
+            "durbin_watson": "in",
+            # Add others as needed
         }
         # Mapping between metrics and their threshold keys
         metric_threshold_pairs = {
@@ -92,6 +94,7 @@ def print_console_report(results, model_wrapper, verbose: bool = False):
             "breusch_pagan_pval": "homoscedasticity_pval_threshold",
             "shapiro_pval": "normality_pval_threshold",
             "dagostino_pval": "normality_pval_threshold",
+            "durbin_watson": "expected_range",
             # Add others as needed
         }
 

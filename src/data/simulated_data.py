@@ -117,6 +117,29 @@ def generate_skewed_data(n_samples: int = 100, seed: int = None) -> pd.DataFrame
     return pd.DataFrame({"x": x, "y": y})
 
 
+def generate_autocorrelated_data(
+    n_samples: int = 100, seed: int = None
+) -> pd.DataFrame:
+    """
+    Generate linear data with autocorrelated residual structure.
+
+    Simulates a simple trend with a sinusoidal component added to induce
+    autocorrelation in the residuals — commonly used to test independence
+    violations (e.g., time series drift).
+
+    Args:
+        n_samples (int, optional): Number of observations to generate. Defaults to 100.
+        seed (int, optional): Random seed for reproducibility. Defaults to None.
+
+    Returns:
+        pd.DataFrame: A DataFrame with columns 'x' (sequential) and 'y' (autocorrelated)
+    """
+    np.random.seed(seed)
+    x = np.arange(n_samples)
+    y = x + np.sin(np.linspace(0, 10 * np.pi, n_samples))
+    return pd.DataFrame({"x": x, "y": y})
+
+
 def list_simulations() -> dict:
     """
     Return a dictionary of available simulated data generators.
@@ -131,4 +154,5 @@ def list_simulations() -> dict:
         "multicollinear": generate_multicollinear_data,
         "nonlinear": generate_nonlinear_data,
         "skewed": generate_skewed_data,
+        "autocorrelated": generate_autocorrelated_data,
     }

@@ -35,6 +35,8 @@ def check_linearity(
         y (pd.Series): Response (1D)
         return_plot (bool, optional): Whether to return base64-encoded
             PNG of the plot. Defaults to False.
+        model_wrapper (optional): Shared fitted model object.
+            If None, a linear model will be created.
 
     Returns:
         AssumptionResult: Structured diagnostic output.

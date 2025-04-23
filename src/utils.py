@@ -72,17 +72,28 @@ def build_result(
     )
 
 
-def classify_severity(value: float, thresholds: dict) -> str:
+def classify_severity(value: float, thresholds: dict | tuple) -> str:
     """
     Classify a numeric value into 'high', 'moderate', or 'low' based on thresholds.
 
+    If a tuple is passed, it's assumed to be a (lower_bound, upper_bound) check.
+    Values inside the range are 'low' severity. Outside = 'high'.
+
     Args:
         value (float): The numeric metric (e.g., R², p-value, VIF).
-        thresholds (dict): Dict with keys 'high', 'moderate', 'low'.
+        thresholds (dict or tuple): Dict with 'high', 'moderate', 'low', or
+         (low, high) bounds.
 
     Returns:
         str: One of 'high', 'moderate', or 'low'
     """
+    if isinstance(thresholds, tuple) and len(thresholds) == 2:
+        low, high = thresholds
+        if low <= value <= high:
+            return "low"
+        else:
+            return "high"
+
     if value >= thresholds["high"]:
         return "high"
     elif value >= thresholds["moderate"]:

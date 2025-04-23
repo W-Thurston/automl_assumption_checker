@@ -33,7 +33,10 @@ def check_multicollinearity(
 
     Args:
         X (pd.DataFrame): Predictor or Feature values (n, p≥2)
+        y (pd.Series): Un-used.
         return_plot (bool, optional): Whether to return a plot. Defaults to False.
+        model_wrapper (optional): Shared fitted model object.
+            If None, a linear model will be created.
 
     Returns:
         AssumptionResult: Structured diagnostic output.
