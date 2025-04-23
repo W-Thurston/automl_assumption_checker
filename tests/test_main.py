@@ -8,7 +8,7 @@ def test_main_script_runs_and_prints_expected_output():
     prints the expected message.
     """
     result = subprocess.run(
-        ["python", "app/main.py"],
+        ["python", "src/main.py"],
         capture_output=True,
         text=True,
     )
