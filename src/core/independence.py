@@ -27,17 +27,18 @@ def check_independence(
     X: pd.Series, y: pd.Series, return_plot: bool = False, model_wrapper=None
 ) -> AssumptionResult:
     """
+
+    This assumption ensures that residuals are not autocorrelated.
+        Which is especially important in time series or ordered data.
+        The Durbin-Watson statistic provides a formal test, and plots
+        can visually highlight correlation patterns.
+
     Check for Independence of Residuals using
     - Plots:
         - Residuals vs Time (if time component exists)
         - Lag plot or autocorrelation function (ACF)
     - Statistical tests:
         - Durbin-Watson Test
-
-    This assumption ensures that residuals are not autocorrelated.
-        Which is especially important in time series or ordered data.
-        The Durbin-Watson statistic provides a formal test, and plots
-        can visually highlight correlation patterns.
 
     Args:
         X (pd.Series or pd.DataFrame): Predictor(s), 1D or multivariate

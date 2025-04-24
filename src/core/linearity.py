@@ -24,6 +24,10 @@ def check_linearity(
     X: pd.Series, y: pd.Series, return_plot: bool = False, model_wrapper=None
 ) -> AssumptionResult:
     """
+
+    Linear models assume a linear relationship between
+    predictors and the target variable.
+
     Check linearity assumption using:
     - Plots:
         - Residuals vs fitted plot
