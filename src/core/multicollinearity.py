@@ -25,6 +25,10 @@ def check_multicollinearity(
     X: pd.DataFrame, y: pd.Series, return_plot: bool = False, model_wrapper=None
 ) -> AssumptionResult:
     """
+
+    Multicollinearity inflates coefficient variance,
+    making estimates unstable and hard to interpret.
+
     Check multicollinearity assumption using:
     - Plots:
         - heatmap of correlation matrix

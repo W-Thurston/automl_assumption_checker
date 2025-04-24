@@ -28,6 +28,11 @@ def check_normality(
     X: pd.Series, y: pd.Series, return_plot: bool = False, model_wrapper=None
 ) -> AssumptionResult:
     """
+
+    Normal residuals allow for valid confidence intervals
+    and hypothesis testing. If this assumption fails,
+    inference may be misleading.
+
     Check normality assumption using:
     - Plots:
         - Q-Q plot

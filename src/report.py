@@ -86,6 +86,9 @@ def print_console_report(results, model_wrapper, verbose: bool = False):
             "anderson_stat": "≤",
             "vif": "≤",
             "durbin_watson": "in",
+            "max_cooks_distance": "≤",
+            "max_leverage": "≤",
+            "max_dfbeta": "≤",
             # Add others as needed
         }
         # Mapping between metrics and their threshold keys
@@ -94,7 +97,11 @@ def print_console_report(results, model_wrapper, verbose: bool = False):
             "breusch_pagan_pval": "homoscedasticity_pval_threshold",
             "shapiro_pval": "normality_pval_threshold",
             "dagostino_pval": "normality_pval_threshold",
+            "vif": "vif_threshold",
             "durbin_watson": "expected_range",
+            "max_cooks_distance": "cooks_distance_threshold",
+            "max_leverage": "leverage_threshold",
+            "max_dfbeta": "dfbeta_threshold",
             # Add others as needed
         }
 
@@ -109,7 +116,12 @@ def print_console_report(results, model_wrapper, verbose: bool = False):
                     comp = metric_comparisons.get(key, "≥")
                     name_fmt = key.replace("_", " ").capitalize()
                     value_fmt = f"{val:.4f}"
-                    threshold_fmt = f"{threshold_val:.4f}"
+                    if isinstance(threshold_val, tuple):
+                        threshold_fmt = (
+                            f"({threshold_val[0]:.4f} – {threshold_val[1]:.4f})"
+                        )
+                    else:
+                        threshold_fmt = f"{threshold_val:.4f}"
                     formatted_details.append((name_fmt, comp, value_fmt, threshold_fmt))
                     continue  # skip to next, don't double-append
             # Match feature VIF + threshold pairs dynamically
@@ -121,7 +133,12 @@ def print_console_report(results, model_wrapper, verbose: bool = False):
                     comp = "≤"
                     name_fmt = key
                     value_fmt = f"{val:.4f}"
-                    threshold_fmt = f"{threshold_val:.4f}"
+                    if isinstance(threshold_val, tuple):
+                        threshold_fmt = (
+                            f"({threshold_val[0]:.4f} – {threshold_val[1]:.4f})"
+                        )
+                    else:
+                        threshold_fmt = f"{threshold_val:.4f}"
                     formatted_details.append((name_fmt, comp, value_fmt, threshold_fmt))
                     continue
             elif "threshold" not in key:

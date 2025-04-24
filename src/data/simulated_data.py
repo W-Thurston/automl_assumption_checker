@@ -140,6 +140,23 @@ def generate_autocorrelated_data(
     return pd.DataFrame({"x": x, "y": y})
 
 
+def generate_passing_influence_data(
+    n_samples: int = 150, seed: int = 42
+) -> pd.DataFrame:
+    """
+    Generate a clean linear dataset unlikely to trigger influence check failures.
+    Characteristics:
+    - Moderately sized sample (to soften thresholds)
+    - No extreme leverage or outliers
+    - Centered, normally distributed predictors
+    """
+    np.random.seed(seed)
+    x = np.random.normal(0, 0.6, n_samples)  # low variance
+    y = 2.5 * x + np.random.normal(0, 0.25, n_samples)  # low residual noise
+
+    return pd.DataFrame({"x": x, "y": y})
+
+
 def list_simulations() -> dict:
     """
     Return a dictionary of available simulated data generators.
@@ -155,4 +172,5 @@ def list_simulations() -> dict:
         "nonlinear": generate_nonlinear_data,
         "skewed": generate_skewed_data,
         "autocorrelated": generate_autocorrelated_data,
+        "passing_influence": generate_passing_influence_data,
     }

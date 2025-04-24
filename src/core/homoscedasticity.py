@@ -25,6 +25,10 @@ def check_homoscedasticity(
     X: pd.Series, y: pd.Series, return_plot: bool = False, model_wrapper=None
 ) -> AssumptionResult:
     """
+
+    Linear regression assumes constant variance of residuals
+    across levels of fitted values. Violation implies inefficient estimates.
+
     Check homoscedasticity assumption using:
     - Plots:
         - Residuals vs fitted plot.
