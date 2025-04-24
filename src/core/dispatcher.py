@@ -4,6 +4,8 @@ from typing import Dict, Tuple
 import pandas as pd
 
 from src.core import homoscedasticity  # noqa: F401
+from src.core import independence  # noqa: F401
+from src.core import influence  # noqa: F401
 from src.core import linearity  # noqa: F401
 from src.core import multicollinearity  # noqa: F401
 from src.core import normality  # noqa: F401

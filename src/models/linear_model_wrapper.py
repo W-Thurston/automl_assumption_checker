@@ -1,5 +1,6 @@
 # src/models/linear_model_wrapper.py
 import statsmodels.api as sm
+from statsmodels.stats.outliers_influence import OLSInfluence
 
 from src.models.base_model_wrapper import BaseModelWrapper
 
@@ -17,6 +18,9 @@ class LinearModelWrapper(BaseModelWrapper):
 
     def fitted(self):
         return self.model.fittedvalues
+
+    def get_influence(self) -> OLSInfluence:
+        return OLSInfluence(self.model)
 
     def summary(self):
         return {"model_type": "Linear Regression", "r_squared": self.model.rsquared}

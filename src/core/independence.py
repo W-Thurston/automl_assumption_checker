@@ -123,7 +123,7 @@ def check_independence(
         summary=f"Durbin-Watson statistic = {dw:.4f} → {'Pass' if passed else 'Fail'}",
         details={
             "durbin_watson": dw,
-            "expected_range": f"{DW_LOWER_BOUND}-{DW_UPPER_BOUND}",
+            "expected_range": (DW_LOWER_BOUND, DW_UPPER_BOUND),
         },
         residuals=residuals,
         fitted=y_pred,
